@@ -46,7 +46,7 @@
                             </div>
                             <div>
                                 <button onclick="matchPin()" type="submit" class="submit-btn">Submit</button>
-                                <p class="action-left">3 try left</p>
+                                <p class="action-left"><span id="limitTry">3</span> try left</p>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,10 @@
         </div>
 
         <script>
+            let limit=3;
             function getPin() {
+                changeLimitation(3);
+
                 const random = Math.random() * 10000;
                 const pin = (random + '').split('.')[0];
                 if (pin.length === 4) {
@@ -95,15 +98,31 @@
             // Matching Pin 
 
             function matchPin() {
+                if(limit==0) {
+                    alert("Please generate new pin and try.");
+                    return;
+                }
                 const pin = document.getElementById('pin').value;
                 const typedPin = document.getElementById('typed-pin').value;
+                
                 if (pin === typedPin) {
                     displayMatchResult('block', 'none');
                 } 
-                else {
+                else {                   
+                   var remaining=(parseInt(limit));
+                   var result=remaining-1; 
                     displayMatchResult('none', 'block');
+                    changeLimitation(result);
                 }
             }
+            function changeLimitation(result) {
+                const limitation = document.getElementById('limitTry');
+                    limitation.innerHTML="";
+                    limitation.append(result);
+                    limit=result;
+            }
+
+
             // Correct or Incorrect Message 
             
             function displayMatchResult(correctStatus, inCorrectStatus) {
